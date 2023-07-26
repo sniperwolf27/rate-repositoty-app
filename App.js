@@ -1,29 +1,23 @@
+// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import RouteListScreen from './screens/RouteListScreen.js';
-import MapScreen from './screens/MapScreen.js';
-
+import RouteListScreen from './src/screens/RouteListScreen';
+import MapScreen from './src/screens/MapScreen';
 
 const Stack = createStackNavigator();
 
-const App = () => {
+export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="RouteList"
-          component={RouteListScreen}
-          options={{ title: 'Lista de Rutas' }}
+      <Stack.Navigator initialRouteName="RouteList">
+        <Stack.Screen 
+          name="RouteList" 
+          component={RouteListScreen} 
+          options={{ headerShown: false }}  // añadido para ocultar la cabecera en RouteListScreen
         />
-        <Stack.Screen
-          name="Map"
-          component={MapScreen}
-          options={{ title: 'Mapa de Ruta' }}
-        />
+        <Stack.Screen name="MapScreen" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default App;
+}
