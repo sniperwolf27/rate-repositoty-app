@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,10 +13,15 @@ export default function App() {
         <Stack.Screen 
           name="RouteList" 
           component={RouteListScreen} 
-          options={{ headerShown: false }}  // añadido para ocultar la cabecera en RouteListScreen
+          options={{ headerShown: false }} 
         />
-        <Stack.Screen name="MapScreen" component={MapScreen} />
+        <Stack.Screen 
+          name="MapScreen" 
+          component={MapScreen} 
+          options={{ headerShown: false }} // Agregado para ocultar la cabecera en MapScreen
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+

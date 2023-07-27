@@ -1,58 +1,61 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 
-const MapScreen = ({ route }) => {
-  const { stops } = route.params;
-
-  const renderMap = (firstStop, secondStop) => (
-    <MapView
-      provider={PROVIDER_GOOGLE}
-      style={styles.map}
-      customMapStyle={darkMapStyle}
-      initialRegion={{
-        latitude: firstStop.stop_lat,
-        longitude: firstStop.stop_lon,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
-      key={firstStop.stop_id}
-    >
-      <Marker
-        coordinate={{ latitude: firstStop.stop_lat, longitude: firstStop.stop_lon }}
-        title={firstStop.stop_name}
-        description="Primera parada"
-      />
-      <Marker
-        coordinate={{ latitude: secondStop.stop_lat, longitude: secondStop.stop_lon }}
-        title={secondStop.stop_name}
-        description="Segunda parada"
-      />
-    </MapView>
-  );
-
-  const renderMaps = () => {
-    const maps = [];
-    for (let i = 0; i < stops.length; i += 2) {
-      const firstStop = stops[i];
-      const secondStop = stops[i + 1] ? stops[i + 1] : stops[i];
-      maps.push(renderMap(firstStop, secondStop));
-    }
-    return maps;
-  };
+const MapScreen = ({ route, navigation }) => {
+  const { stop } = route.params;
 
   return (
     <View style={styles.container}>
-      {renderMaps()}
+      <View style={styles.backButtonContainer}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>Volver</Text>
+        </TouchableOpacity>
+      </View>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        customMapStyle={darkMapStyle}  
+        region={{
+          latitude: stop.stop_lat,
+          longitude: stop.stop_lon,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      >
+        <Marker
+          coordinate={{ latitude: stop.stop_lat, longitude: stop.stop_lon }}
+          title={stop.stop_name}
+          description="Parada"
+        />
+      </MapView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  map: { height: '100%' }, 
+  container: { ...StyleSheet.absoluteFillObject },
+  map: { ...StyleSheet.absoluteFillObject },
+  backButtonContainer: {
+    zIndex: 1, 
+    position: 'absolute', 
+    top: 10,
+    left: 10
+  },
+  backButton: {
+    backgroundColor: '#3F2305', 
+    padding: 10,
+    borderRadius: 10,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#F5F5F5', 
+    fontFamily: 'Helvetica Neue',
+  }
 });
-
 const darkMapStyle = [
   { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },

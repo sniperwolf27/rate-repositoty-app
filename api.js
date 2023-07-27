@@ -26,11 +26,6 @@ export const getRoutes = async () => {
   }
 };
 
-
-export const getStopByRouteName = async (routeName) => {
-  const response = await axios.get("https://gtfs-restapi-production.up.railway.app/stops");
-  return response.data.find(stop => stop.stop_name == routeName);
-};
 // Obtener las paradas de una ruta de transporte público especificada por su ID
 export const getStopsByRouteId = async (routeId) => {
   try {
@@ -55,6 +50,33 @@ export const getNextStopByCurrentStopId = async (currentStopId) => {
     throw new Error(`Error fetching next stop: ${response.status}`);
   }
 };
+// api.js
+
+// ...
+
+export const getStopByRouteName = async (routeName) => {
+  // Primero obtenemos todas las rutas y paradas
+  const [routes, stops] = await Promise.all([
+    getRoutes(),
+    getStops(),
+  ]);
+
+  // Buscar la ruta por nombre
+  const route = routes.find(route => route.route_long_name === routeName);
+
+  // Si no encontramos la ruta, devolvemos null
+  if (!route) {
+    return null;
+  }
+
+  // Ahora buscamos las paradas que pertenecen a esta ruta
+  const routeStops = stops.filter(stop => stop.route_id === route.route_id);
+
+  // Devolvemos la primera parada de la ruta
+  // Podrías cambiar esta lógica para adaptarla a tus necesidades
+  return routeStops[0];
+};
+
 
 
 
